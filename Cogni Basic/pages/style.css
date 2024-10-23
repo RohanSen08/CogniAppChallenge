@@ -1,0 +1,152 @@
+/* Global Styles */ 
+:root {
+    /* Primary Colors */
+    --primary1: #081d24; /* Deep, dark blue for main backgrounds */
+    --primary2: #5228f5; /* Vibrant purple for key accents */
+
+    /* Secondary Colors */
+    --secondary1: #354CFC; /* Medium blue for secondary elements */
+    --secondary2: #7a89ff; /* Light blue for lighter elements or accents */
+
+    /* Accent Colors */
+    --accent1: #9B547F; /* Muted pink as a warm, soft accent */
+    --accent2: #e7ecef; /* Light grey for neutral contrasts */
+
+    /* Interactive Colors */
+    --interactive1: #f5dd8f; /* Warm yellow for interactive elements like buttons */
+    --interactive2: #ffc107; /* Bright yellow for standout interactive elements */
+    --gradient1: linear-gradient(135deg, #354CFC 0%, #7a89ff 100%); 
+    --gradient2: linear-gradient(135deg, var(--accent1) 0%, var(--interactive2) 100%); /* Gradient from muted pink to bright yellow */
+
+    /* New Background Color */
+    --background-alt: #201862; /* A deep shade of teal as an alternative background */
+}
+
+* {
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: var(--primary1);
+    color: var(--accent2);
+}
+
+header {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
+.logo-container, .button-container {
+    display: flex;
+    justify-content: center; /* Center contents */
+}
+
+.navbar-logo {
+    height: auto;  
+    width: 120px; /* Adjust as needed */
+}
+
+nav {
+    flex: 2; /* Allocate twice the space to navigation for centering */
+    display: flex;
+    justify-content: center;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+nav li {
+    margin: 0 1rem;
+}
+
+nav a {
+    color: var(--accent2);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: var(--interactive2);
+}
+
+.navbar-logo{
+    height: auto;  
+    width: 120px;
+}
+
+.Sign-in {
+    padding: 8px 16px;
+    background-color: var(--secondary1); 
+    color: var(--accent3); 
+    border: 2px solid var(--primary2); 
+    border-radius: 4px; 
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    margin-left: auto;
+}
+
+.Sign-in:hover {
+    background-color: var(--primary2); 
+    border-color: var(--accent2); /* Border color changes on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7); /* Enhanced shadow on hover */
+}
+
+/* Footer Styles */
+footer {
+    background-color: var(--primary1);
+    color: var(--accent1);
+    text-align: center;
+    padding: 1rem;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar-logo {
+        margin-bottom: 10px;
+    }
+
+    .service-section {
+        flex-direction: column;
+    }
+
+    .service {
+        width: 100%;
+    }
+
+    .about-container {
+        flex-direction: column;
+    }
+
+    .about-logo {
+        margin-bottom: 20px;
+    }
+}

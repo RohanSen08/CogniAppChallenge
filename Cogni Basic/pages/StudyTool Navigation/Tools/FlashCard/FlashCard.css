@@ -1,0 +1,258 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: var(--background-alt);
+}
+
+.loading-screen {
+    position: fixed; /* Fixed position to cover the whole screen */
+    top: 0;
+    left: 0;
+    width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    z-index: 1000; /* High z-index to be on top of other elements */
+    visibility: hidden; /* Initially hidden */
+}
+
+.settings-panel {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 250px; 
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 10;
+    background: var(--accent2);
+    color: var(--primary1);
+    padding-top: 50px;
+}
+
+.settings-panel.open {
+    transform: translateX(0);
+}
+
+.settings-content {
+    padding: 20px;
+}
+
+.settings-panel {
+    background-color: var(--primary1); /* Use your primary color */
+    color: var(--accent2); /* Text color for contrast */
+    width: 250px; /* Adjust as needed */
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    padding: 20px; /* Master padding for the entire panel */
+    box-shadow: 2px 0 10px rgba(0,0,0,0.5); /* Shadow for depth */
+    z-index: 10; /* Ensure it's above other content */
+}
+
+.settings-content {
+    margin-top: 20px; /* Spacing after the toggle button */
+}
+
+.settings-content > * + * {
+    margin-top: 20px; /* Spacing between settings groups */
+}
+
+.settings-content h3 {
+    margin-bottom: 15px; /* Space below the title */
+    font-size: 1.25rem; /* Larger font size for the title */
+}
+
+.settings-content label {
+    display: block; /* Full width for labels */
+    font-weight: bold; /* Emphasize labels */
+}
+
+.settings-content select, .settings-content .checkbox-wrapper-5 {
+    width: 100%; /* Full width for select boxes and custom checkboxes */
+    padding: 8px; /* Padding for better touch */
+    margin-bottom: 10px; /* Spacing after selects and checkboxes */
+}
+
+.checkbox-wrapper-5 .check {
+    position: relative;
+}
+
+.toggle-button {
+    position: absolute;
+    right: -30px; /* Adjust based on the button size */
+    top: 50%;
+    transform: translateY(-50%) rotate(180deg);
+    background: var(--primary2);
+    color: var(--accent2);
+    border: none;
+    cursor: pointer;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--secondary2);
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: var(--primary2);
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 15px;
+    gap: 20px; 
+    flex-grow: 1;
+    transition: margin-left 0.3s ease;
+}
+
+.settings-panel.open ~ .wrapper {
+    margin-left: 250px; /* Same as the width of the settings panel */
+}
+
+.counter{
+    color: var(--interactive2);
+    font-size: 25px;
+    padding-top: 10vh;
+    padding-bottom: 25px;
+}
+
+.container{
+    width: 500px;
+    height: 350px;
+    perspective: 1000px;
+    display: flex;
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+.card:hover {
+    cursor: pointer
+}
+
+.card.flipped{
+    transform: rotateY(180deg);
+}
+
+.front,
+.back {
+    height: 100%;
+    width: 100%;
+    padding: 25px 15px;
+    display: flex;
+    font-size: 20px;
+    text-align: center;
+    position: absolute; 
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+    box-shadow: 0 0 5px 2px rgba(50, 50, 50, 0.25); 
+    backface-visibility: hidden;
+}
+
+.front {
+    background-color: var(--secondary2);
+    align-items: center;
+}
+
+.front h1{
+    color: var(--accent2);
+}
+
+.back{
+    background-color: var(--secondary2);
+    color: var(--accent2);
+    transform: rotateY(180deg);
+    flex-direction: column;
+    align-items: center;
+    gap: 5rem;
+}
+
+.input-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    border: none;
+    margin: auto;
+    width: 75%;
+    bottom: 40px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: rgba(0,0,0,0.5) 0 5px 5px, 
+    rgba(0,0,0,0.05) 0 -12px 30px, 
+    rgba(0,0,0,0.05) 0 4px 6px, 
+    rgba(0,0,0,0.05) 0 12px 13px, 
+    rgba(0,0,0,0.09) 0 -3px 5px;
+}
+
+input[type="text"] {
+    width: 100%;
+    background-color: transparent;
+    outline: none;
+    font-size: 15px;
+    caret-color: var(--accent2);
+    border: var(--accent2);
+    color: var(--accent2);
+}
+
+input[type="text"]::placeholder {
+    color: var(--accent2)
+}
+
+.button-container {
+    text-align: center; /* Center buttons horizontally */
+    margin-top: 20px; /* Space above the buttons */
+}
+
+.button-container button {
+    padding: 10px 35px;
+    margin: 0 10px; /* Space between buttons */
+    background-color: var(--primary2);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button-container button:hover {
+    background-color: #505f91;
+}
+

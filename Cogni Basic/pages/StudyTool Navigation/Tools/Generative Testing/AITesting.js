@@ -1,5 +1,3 @@
-
-
 const inputElement = document.querySelector('#topicInput');
 const quizContainer = document.querySelector('#quiz-container');
 const continueButton = document.querySelector('.button-Continue');
@@ -17,6 +15,11 @@ const insightsContainer = document.getElementById('inDepthAnalysis');
 const reviewContainer = document.getElementById('review-container');
 
 // Quiz Configuration
+let testLength = 'quick';
+let generatedQuestionAmount = 4;
+let categoryTotal = 3;
+
+// State Variables
 let testingData = [];
 let selectedAnswers = [];
 let specificCategories = [];
@@ -26,7 +29,6 @@ let quizState = 'answering';
 let specificTopicInProgress = false;
 let testQuestionsInProgress = false;
 let currentQuestionIndex = 0;
-let allInsightsData = [];
 
 // Debounce Timer
 let debounceTimeout = null;
@@ -81,9 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Event listener for the Continue button
     continueButton.addEventListener('click', (event) => {
         event.preventDefault();
-    
+
         if (quizState === 'answering') {
             if (checkAllQuestionsAnswered()) {
                 continueButton.disabled = true;
@@ -188,22 +191,6 @@ function showLoadingScreen() {
 function hideLoadingScreen() {
     if (loadingScreen) {
         loadingScreen.style.visibility = 'hidden';
-    }
-}
-
-// Function to show the localized loading screen (specific to insights/navigation area)
-function showFeedbackLoading() {
-    const insightsLoadingScreen = document.getElementById('insightsLoadingScreen');
-    if (insightsLoadingScreen) {
-        insightsLoadingScreen.style.display = 'flex'; // Use 'flex' if you want to center content using flexbox
-    }
-}
-
-// Function to hide the localized loading screen (specific to insights/navigation area)
-function hideFeedbackLoading() {
-    const insightsLoadingScreen = document.getElementById('insightsLoadingScreen');
-    if (insightsLoadingScreen) {
-        insightsLoadingScreen.style.display = 'none';
     }
 }
 
@@ -370,11 +357,6 @@ async function generateTestQuestions(specificCategory) {
 
     console.log(`GPT called with specific category: ${specificCategory}`);
     showLoadingScreen();
-
-    insightsContainer.style.display = 'none';
-    reviewContainer.style.display = 'none';
-    insightsContainer.innerHTML = '';
-    reviewContainer.innerHTML = '';
 
     const testQuestionFunction = {
         name: "generate_test_questions",
@@ -594,6 +576,7 @@ function updateNavigationButtons() {
     console.log(`Continue button display: ${continueButton.style.display}`);
 }
 
+
 // Function to check if all questions have been answered
 function checkAllQuestionsAnswered() {
     return selectedAnswers.every(answer => answer !== null);
@@ -611,7 +594,7 @@ function handleOptionSelect(questionIndex, selectedOptionValue) {
 }
 
 // Function to process selected answers and generate feedback
-async function processSelectedAnswers() {
+function processSelectedAnswers() {
     console.log('Processing selected answers...');
     showLoadingScreen();
 
@@ -659,179 +642,16 @@ async function processSelectedAnswers() {
     console.log(`Incorrect answers: ${incorrectCount}`);
     console.log('Incorrect answer details:', incorrectDetails);
 
-    // Accumulate insights data for all subcategories
-    allInsightsData.push({
-        category: specificCategories[currentCategoryIndex],
-        insights: insightsData
-    });
-
     quizState = 'feedback';
 
-    // Consolidated function to display insights and feedback
-    await displayInsightsAndFeedback(insightsData);
+    // Display instant insights and review section
+    displayInsightsAndReview(insightsData);
 
     hideLoadingScreen();
 }
 
-// Function to provide feedback based on selected answers
-async function provideFeedback() {
-    console.log('Preparing to fetch feedback...');
-
-    showFeedbackLoading();
-
-    const messages = [
-        {
-            role: "system",
-            content: "You are an AI tutor providing feedback based on quiz performance."
-        },
-        {
-            role: "user",
-            content: `The student has just completed a quiz section on "${specificCategories[currentCategoryIndex]}". Here are the details of the questions they got wrong:\n\n${JSON.stringify(incorrectDetails)}\n\nPlease provide feedback divided into 3 sections:\n1. Summary of their performance.\n2. Explanation of the correct answers for the questions they got wrong.\n3. Common mistakes to avoid. Respond in JSON format with the keys 'summary', 'explanations', and 'tips'.`
-        }
-    ];
-
-    const feedbackSchema = {
-        type: "object",
-        properties: {
-            summary: { 
-                type: "string", 
-                description: "A brief summary of the student's overall performance in the quiz." 
-            },
-            explanations: { 
-                type: "string", 
-                description: "Detailed explanations of the correct answers for the questions the student got wrong." 
-            },
-            tips: { 
-                type: "string", 
-                description: "Practical tips and recommendations for improvement based on the quiz performance." 
-            }
-        },
-        required: ["summary", "explanations", "tips"],
-        additionalProperties: false
-    };
-
-    console.log('Sending request to OpenAI with structured outputs:', messages);
-
-    const options = {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${API_KEY}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            model: "gpt-4o-2024-08-06",
-            messages: messages,
-            functions: [{
-                name: "generate_feedback",
-                description: "Generate personalized feedback based on the student's quiz performance. Feedback should include a summary, explanations, and tips in JSON format.",
-                parameters: feedbackSchema
-            }],
-            function_call: "auto",
-            max_tokens: 1000,
-            temperature: 0.7,
-            n: 1
-        })
-    };
-
-    try {
-        let response = await fetch('https://api.openai.com/v1/chat/completions', options);
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error('API Error:', errorData);
-            throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        let data = await response.json();
-        console.log('Feedback generated:', data);
-
-        if (data.choices && data.choices.length > 0) {
-            const choice = data.choices[0];
-            if (choice.message.function_call && choice.message.function_call.arguments) {
-                const feedback = JSON.parse(choice.message.function_call.arguments);
-                console.log('Feedback parsed:', feedback);
-                // Display feedback after insights
-                displayFeedback(feedback); // Updated to call displayFeedback
-            } else if (choice.message.content) {
-                // Fallback if function_call is not used
-                try {
-                    const feedback = JSON.parse(choice.message.content);
-                    console.log('Feedback parsed from content:', feedback);
-                    displayFeedback(feedback); // Updated to call displayFeedback
-                } catch (parseError) {
-                    console.error('Error parsing feedback from content:', parseError.message);
-                }
-            } else {
-                console.error('No function_call or content returned from GPT.');
-            }
-        } else {
-            console.error('No choices returned from GPT.');
-        }
-    } catch (error) {
-        console.error('Error generating feedback:', error.message);
-    } finally {
-        hideFeedbackLoading();
-    }
-}
-
-// Function to display AI-generated feedback to the user
-function displayFeedback(feedback) {
-    // Ensure the insights container is visible
-    insightsContainer.style.display = 'block';
-    
-    // Clear any existing content to prevent duplication
-    insightsContainer.innerHTML = '';
-    
-    // Create a heading for the feedback section
-    const feedbackHeading = document.createElement('h2');
-    feedbackHeading.textContent = 'AI-Generated Feedback';
-    insightsContainer.appendChild(feedbackHeading);
-    
-    // Define the sections expected in the feedback
-    const feedbackSections = ['summary', 'explanations', 'tips'];
-    
-    feedbackSections.forEach(section => {
-        if (feedback[section]) {
-            const sectionDiv = document.createElement('div');
-            sectionDiv.className = `feedback-section ${section}`; // Optional: Add classes for styling
-            
-            const sectionTitle = document.createElement('h3');
-            sectionTitle.textContent = capitalizeWords(section);
-            sectionDiv.appendChild(sectionTitle);
-            
-            const sectionContent = document.createElement('p');
-            sectionContent.textContent = feedback[section];
-            sectionDiv.appendChild(sectionContent);
-            
-            insightsContainer.appendChild(sectionDiv);
-        }
-    });
-    
-    // Create a container for the Continue button
-    const continueButtonContainer = document.createElement('div');
-    continueButtonContainer.className = 'continue-button-container'; // Optional: Add class for styling
-    
-    // Append the Continue button to its container
-    continueButtonContainer.appendChild(continueButton);
-    
-    // Append the Continue button container to the insights container
-    insightsContainer.appendChild(continueButtonContainer);
-    
-    // Scroll to the feedback section for better user experience
-    feedbackHeading.scrollIntoView({ behavior: "smooth" });
-    
-    // Update the Continue button text based on remaining categories
-    if (currentCategoryIndex < specificCategories.length - 1) {
-        continueButton.textContent = 'Next Category →';
-    } else {
-        continueButton.textContent = 'Finish Quiz';
-    }
-    
-    // Ensure the Continue button is visible and enabled
-    continueButton.style.display = 'block';
-    continueButton.disabled = false;
-}
-
-// Consolidated Function to display insights and feedback after quiz completion
-async function displayInsightsAndFeedback(insightsData) {
+// Function to display insights and review after quiz completion
+function displayInsightsAndReview(insightsData) {
     // Hide question section
     questionSection.style.display = 'none';
 
@@ -853,6 +673,9 @@ async function displayInsightsAndFeedback(insightsData) {
     const insightsSummary = document.createElement('p');
     insightsSummary.textContent = `You answered ${correctCount} out of ${totalQuestions} questions correctly.`;
     insightsContainer.appendChild(insightsSummary);
+
+    // Add 'Continue' button under insights
+    insightsContainer.appendChild(continueButton);
 
     // Display review container
     reviewContainer.style.display = 'block';
@@ -897,127 +720,6 @@ async function displayInsightsAndFeedback(insightsData) {
     reviewList.style.overflowY = 'auto';
 
     reviewContainer.appendChild(reviewList);
-
-    // Ensure 'Continue' button is appended after insights
-    insightsContainer.appendChild(continueButton);
-
-    // Ensure the continue button is visible and not disabled
-    continueButton.style.display = 'block';
-    continueButton.disabled = false;
-
-    // Add event listener to continue button
-    continueButton.onclick = async function () {
-        // Move to the next subcategory or finish the quiz
-        if (currentCategoryIndex < specificCategories.length - 1) {
-            currentCategoryIndex++;  // Move to the next category
-            quizState = 'answering';
-            insightsContainer.innerHTML = ''; // Clear the insights
-            await generateTestQuestions(specificCategories[currentCategoryIndex]);
-        } else {
-            // All categories are done, generate in-depth analysis
-            quizState = 'finished';
-            await generateInDepthAnalysis();
-        }
-    };
-
-    // Fetch and display AI-generated feedback
-    await provideFeedback();
-
-    // Ensure the 'Continue' button remains visible and clickable after feedback is provided
-    continueButton.style.display = 'block';
-    continueButton.disabled = false;
-}
-
-// Consolidated Function to display insights and feedback after quiz completion
-async function displayInsightsAndFeedback(insightsData) {
-    // Hide question section
-    questionSection.style.display = 'none';
-
-    // Display insights container
-    insightsContainer.style.display = 'block';
-
-    // Clear previous insights and review content
-    insightsContainer.innerHTML = '';
-    reviewContainer.innerHTML = '';
-
-    // Display instant insights
-    const insightsHeading = document.createElement('h2');
-    insightsHeading.textContent = 'Instant Insights';
-    insightsContainer.appendChild(insightsHeading);
-
-    const correctCount = insightsData.filter(data => data.isCorrect).length;
-    const totalQuestions = insightsData.length;
-
-    const insightsSummary = document.createElement('p');
-    insightsSummary.textContent = `You answered ${correctCount} out of ${totalQuestions} questions correctly.`;
-    insightsContainer.appendChild(insightsSummary);
-
-    // Display review container
-    reviewContainer.style.display = 'block';
-
-    const reviewHeading = document.createElement('h3');
-    reviewHeading.textContent = 'Review Your Answers';
-    reviewContainer.appendChild(reviewHeading);
-
-    const reviewList = document.createElement('div');
-    reviewList.className = 'review-list';
-
-    insightsData.forEach(data => {
-        const reviewItem = document.createElement('div');
-        reviewItem.className = 'review-item';
-        reviewItem.style.backgroundColor = data.isCorrect ? '#e6ffe6' : '#ffe6e6';
-        reviewItem.style.border = `1px solid ${data.isCorrect ? 'green' : 'red'}`;
-        reviewItem.style.padding = '10px';
-        reviewItem.style.marginBottom = '10px';
-        reviewItem.style.borderRadius = '5px';
-
-        const questionNum = document.createElement('h4');
-        questionNum.textContent = `Question ${data.questionNumber}: ${data.question}`;
-        reviewItem.appendChild(questionNum);
-
-        const yourAnswer = document.createElement('p');
-        yourAnswer.textContent = `Your Answer: ${data.selectedAnswer}`;
-        reviewItem.appendChild(yourAnswer);
-
-        const correctAnswer = document.createElement('p');
-        correctAnswer.textContent = `Correct Answer: ${data.correctAnswer}`;
-        reviewItem.appendChild(correctAnswer);
-
-        const explanation = document.createElement('p');
-        explanation.textContent = `Explanation: ${data.explanation}`;
-        reviewItem.appendChild(explanation);
-
-        reviewList.appendChild(reviewItem);
-    });
-
-    // Make the review list scrollable
-    reviewList.style.maxHeight = '300px';
-    reviewList.style.overflowY = 'auto';
-
-    reviewContainer.appendChild(reviewList);
-
-    // Make the review list scrollable
-    reviewList.style.maxHeight = '300px';
-    reviewList.style.overflowY = 'auto';
-
-    // Ensure 'Continue' button is appended, visible, and clickable
-    insightsContainer.appendChild(continueButton);
-    continueButton.style.display = 'block';
-    continueButton.disabled = false;
-
-    // Fetch and display AI-generated feedback
-    await provideFeedback();
-
-    // Set 'continueButton' text based on whether there are more categories
-    if (currentCategoryIndex < specificCategories.length - 1) {
-        continueButton.textContent = 'Next Category →';
-    } else {
-        continueButton.textContent = 'Finish Quiz';
-    }
-
-    // Ensure the 'Continue' button remains visible and clickable after feedback is provided
-    continueButton.style.display = 'block';
-    continueButton.disabled = false;
 }
 
 // Function to handle the end of the quiz and generate in-depth analysis
@@ -1030,19 +732,17 @@ function endQuiz() {
 async function generateInDepthAnalysis() {
     showLoadingScreen();
 
-    // Aggregate all insights data
+    const totalQuestions = testingData.length;
+    const correctAnswers = selectedAnswers.filter((answer, index) => answer === testingData[index].correct_answer).length;
+    const incorrectAnswers = totalQuestions - correctAnswers;
+    const performancePercentage = ((correctAnswers / totalQuestions) * 100).toFixed(2);
+
     const analysisData = {
-        totalCategories: specificCategories.length,
-        totalQuestions: allInsightsData.reduce((acc, cat) => acc + cat.insights.length, 0),
-        totalCorrectAnswers: allInsightsData.reduce((acc, cat) => acc + cat.insights.filter(q => q.isCorrect).length, 0),
-        totalIncorrectAnswers: allInsightsData.reduce((acc, cat) => acc + cat.insights.filter(q => !q.isCorrect).length, 0),
-        performancePercentage: ((allInsightsData.reduce((acc, cat) => acc + cat.insights.filter(q => q.isCorrect).length, 0) / allInsightsData.reduce((acc, cat) => acc + cat.insights.length, 0)) * 100).toFixed(2),
-        incorrectDetails: allInsightsData.reduce((acc, cat) => acc.concat(cat.insights.filter(q => !q.isCorrect).map(q => ({
-            category: cat.category,
-            question: q.question,
-            correctAnswer: q.correctAnswer,
-            selectedAnswer: q.selectedAnswer
-        }))), [])
+        totalQuestions,
+        correctAnswers,
+        incorrectAnswers,
+        performancePercentage,
+        incorrectDetails
     };
 
     const messages = [
@@ -1075,7 +775,7 @@ async function generateInDepthAnalysis() {
     const options = {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${API_KEY}`, // Ensure this is securely handled in production!
+            'Authorization': `Bearer ${API_KEY}`, // **IMPORTANT:** Ensure this is securely handled in production!
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -1184,35 +884,6 @@ function displayInsightsAndReview(insightsData) {
     reviewContainer.appendChild(reviewList);
 }
 
-// Function to display the in-depth analysis to the user
-function displayInDepthAnalysis(analysis) {
-    insightsContainer.style.display = 'block';
-    insightsContainer.innerHTML += '<h2>In-Depth Analysis</h2>'; // Add a heading for clarity
-
-    const analysisSections = ['summary', 'understanding', 'skills', 'common_struggles', 'recommendations'];
-
-    analysisSections.forEach(section => {
-        if (analysis[section]) {
-            const div = document.createElement('div');
-            const heading = document.createElement('h3');
-            heading.textContent = capitalizeWords(section.replace('_', ' '));
-            const content = document.createElement('p');
-            content.textContent = analysis[section];
-            div.appendChild(heading);
-            div.appendChild(content);
-            insightsContainer.appendChild(div);
-        }
-    });
-
-    // Scroll down to display analysis
-    insightsContainer.scrollIntoView({ behavior: "smooth" });
-
-    // Set 'continueButton' text to allow quiz restart
-    continueButton.textContent = 'Restart Quiz';
-    continueButton.style.display = 'block';
-    continueButton.disabled = false;
-}
-
 // Function to restart the quiz
 function restartQuiz() {
     selectedAnswers = [];
@@ -1221,7 +892,6 @@ function restartQuiz() {
     specificCategories = [];
     testingData = [];
     incorrectDetails = [];
-    allInsightsData = []; // Reset accumulated insights data
 
     // Reset UI
     quizContainer.innerHTML = '';

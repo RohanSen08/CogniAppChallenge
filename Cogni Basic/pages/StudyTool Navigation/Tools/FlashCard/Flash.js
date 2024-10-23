@@ -1,4 +1,3 @@
-
 const outPutElement = document.querySelector('#output');
 const FrontCardH1 = document.querySelector('.front h1');
 const BackCardP = document.querySelector('.back p');

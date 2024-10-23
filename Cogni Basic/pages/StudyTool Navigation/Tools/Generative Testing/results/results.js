@@ -1,6 +1,3 @@
-let incorrectDetails = JSON.parse(localStorage.getItem('incorrectDetails'));
-
-
 async function generateresults(){
     console.log('generating results');
     let options = {

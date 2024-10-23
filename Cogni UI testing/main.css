@@ -1,0 +1,48 @@
+/* Main CSS File */
+
+/* Apply the key color palette */
+:root {
+    --primary-color: #5228f5;
+    --secondary-color: #354cfc;
+    --accent-color: #0D0043;
+    --background-color: #F7F7FF;
+    --background-light: #ffffff;
+    --paragraph: #6e6e86;
+    --gradiant-1: 90deg, #5228F5 0%, #0D0043 100%;
+    --gradiant-2: 270deg, #7A89FF 0%, #5228F5 100%;
+}
+
+
+/* General body styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    color: var(--dark-color);
+}
+
+/* Main content styling */
+
+.main-content h1 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.main-content .search-box {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.main-content .search-box button {
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 0 5px 5px 0;
+}
+
+.main-content .search-box button:hover {
+    background-color: var(--secondary-color);
+}
+
+

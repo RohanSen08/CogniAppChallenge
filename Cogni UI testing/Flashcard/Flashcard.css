@@ -1,0 +1,506 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins%3Awght%40100%3B200%3B300%3B400%3B500%3B600&display=swap%27%29%3B');
+
+body {
+  background-color: var(--background-color);
+  justify-content: center;
+  height: 100vh;
+  /*display: grid;*/
+  /*grid-template-columns: auto 1fr;*/
+}
+:root {
+  --primary-color: #5228f5;
+  --secondary-color: #354cfc;
+  --accent-color: #0D0043;
+  --background-color: #F7F7FF;
+  --background-light: #ffffff;
+  --paragraph: #6e6e86;
+  --gradiant-1: 90deg, #5228F5 0%, #0D0043 100%;
+  --gradiant-2: 270deg, #7A89FF 0%, #5228F5 100%;
+}
+
+html{
+  font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.5 rem;
+}
+
+
+.flashcards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: margin-left 0.3s ease-in-out;
+  padding: 20px;
+}
+
+.settings-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Aligns items to the left */
+  padding: 10px;
+  width: 100%; /* Ensures the container spans the full width if needed */
+}
+
+.settings-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Poppins';
+}
+
+.settings-button img {
+  width: 40px; /* Your desired size */
+  height: 40px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  background-color: var(--background-color);
+  background-image: url('data:image/svg+xml,%3Csvg%20width%3D%221014%22%20height%3D%22900%22%20viewBox%3D%220%200%201014%20900%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20opacity%3D%220.3%22%20filter%3D%22url%28%23filter0_f_1_591%29%22%3E%3Ccircle%20cx%3D%22507%22%20cy%3D%22392.597%22%20r%3D%22175.745%22%20fill%3D%22%237A89FF%22/%3E%3C/g%3E%3Cdefs%3E%3Cfilter%20id%3D%22filter0_f_1_591%22%20x%3D%220.254639%22%20y%3D%22-114.149%22%20width%3D%221013.49%22%20height%3D%221013.49%22%20filterUnits%3D%22userSpaceOnUse%22%20color-interpolation-filters%3D%22sRGB%22%3E%3CfeFlood%20flood-opacity%3D%220%22%20result%3D%22BackgroundImageFix%22/%3E%3CfeBlend%20mode%3D%22normal%22%20in%3D%22SourceGraphic%22%20in2%3D%22BackgroundImageFix%22%20result%3D%22shape%22/%3E%3CfeGaussianBlur%20stdDeviation%3D%22165.5%22%20result%3D%22effect1_foregroundBlur_1_591%22/%3E%3C/filter%3E%3C/defs%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.content h1 {
+  font-size: 48px;
+  text-align: center;
+  background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 34px;
+  font-weight: 700;
+}
+
+.progress-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #e0e0e0; /* Background of the progress bar */
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-bar .progress {
+  height: 100%;
+  background-color: #542EF6; /* Color of the progress indicator */
+  width: 0%; /* Will be updated via JavaScript */
+  transition: width 0.3s ease; /* Smooth transition */
+}
+
+.progress {
+  width: 10%;
+  height: 100%;
+  background-color: var(--primary-color);
+}
+
+.progress-text {
+  color: var(--accent-color);
+}
+
+.the-flash-card-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.the-flash-card {
+  width: 100%;
+  height: 320px;
+  border-radius: 15px;
+  background: var(--background-light);
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  transform-style: preserve-3d;
+  transition: transform 0.8s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.the-flash-card .front, 
+.the-flash-card .back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-size: 1.2em;
+  color: #0D0043;
+  ;
+}
+
+.the-flash-card .back {
+  transform: rotateY(180deg);
+}
+
+.the-flash-card.flipped {
+  transform: rotateY(180deg);
+}
+
+.left-and-right-arrows {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 200px;
+  margin-bottom: 20px;
+}
+
+.left-and-right-arrows button {
+  border: none;
+  background-color: var(--background);
+  border-radius: 5px;
+  padding: 2px 30px;
+  font-size: 2.0em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.left-and-right-arrows button:hover {
+  background-color: var(--secondary-color);
+}
+
+.prompt-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  background-color: #FFF;
+  padding: 40px;
+  border-radius: 20px; /* More rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add box shadow */
+}
+
+.prompt-section input[type="text"] {
+  width: 100%;
+  padding: 20px; 
+  border: 2px dashed var(--primary-color);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  background-color: #f8f5ff;
+}
+
+.submit-button {
+  background: linear-gradient(270deg, #7A89FF 0%, #5228F5 100%);
+  cursor: pointer;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  transition: background-position 0.5s ease, color 0.5s ease, transform 0.1s ease;
+  background-size: 200% 100%;
+  background-position: 0% 0%;
+  display: flex;
+  align-items: center;
+}
+
+.submit-button:hover {
+  background-color: var(--secondary-color);
+}
+
+/* Button Click Effect */
+.submit-button:active {
+  transform: scale(0.95); /* Slightly scales down the button */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Adds a pressed effect with shadow */
+}
+
+/* Optional animation for button icon */
+.button-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  transition: transform 0.3s ease; /* Adds transition for the icon */
+}
+
+/* Animate icon rotation on click */
+.submit-button:active .button-icon {
+  transform: rotate(20deg); /* Slightly rotates the icon on click */
+}
+/* Container for settings panel and main content */
+.container-fluid {
+  display: flex;
+  width: 100%;
+}
+/*Sidebar stuff*/
+
+#sidebar {
+  box-sizing: border-box;
+  height: 100vh;  /* Sidebar height */
+  width: 250px;  /* Sidebar width */
+  padding: 5px 1em;
+  background-color: var(--base-clr);
+  border-right: 1px solid var(--line-clr);
+  position: absolute; /* Keep sidebar in a fixed position */
+  top: 30%; /* Initially 25% from the top */
+  left: 0; /* Align to the left */
+  transition: 300ms ease-in-out; /* Smooth transition */
+  overflow: hidden;
+}
+#sidebar.close{
+  padding: 5px;
+  width: 60px;
+}
+#sidebar ul{
+  list-style: none;
+}
+#sidebar > ul > li:first-child{
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  .logo{
+    font-weight: 600;
+  }
+}
+#sidebar ul li.active a{
+  color: var(--accent-clr);
+
+  svg{
+    fill: var(--accent-clr);
+  }
+}
+
+#sidebar a, #sidebar .dropdown-btn, #sidebar .logo{
+  border-radius: .5em;
+  padding: .85em;
+  text-decoration: none;
+  color: var(--text-clr);
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+.dropdown-btn{
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+#sidebar svg{
+  flex-shrink: 0;
+  fill: var(--text-clr);
+}
+#sidebar a span, #sidebar .dropdown-btn span{
+  flex-grow: 1;
+}
+#sidebar a:hover, #sidebar .dropdown-btn:hover{
+  background-color: var(--hover-clr);
+}
+#sidebar .sub-menu{
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: 300ms ease-in-out;
+
+  > div{
+    overflow: hidden;
+  }
+}
+#sidebar .sub-menu.show{
+  grid-template-rows: 1fr;
+}
+.dropdown-btn svg{
+  transition: 200ms ease;
+}
+.rotate svg:last-child{
+  rotate: 180deg;
+}
+#sidebar .sub-menu a{
+  padding-left: 2em;
+}
+#toggle-btn{
+  margin-left: auto;
+  padding: 1em;
+  border: none;
+  border-radius: .5em;
+  background: none;
+  cursor: pointer;
+
+  svg{
+    transition: rotate 150ms ease;
+  }
+}
+#toggle-btn:hover{
+  background-color: var(--hover-clr);
+}
+
+main{
+  padding: min(30px, 7%);
+}
+main p{
+  color: var(--secondary-text-clr);
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+@media(max-width: 800px){
+  body{
+    grid-template-columns: 1fr;
+  }
+  main{
+    padding: 2em 1em 60px 1em;
+  }
+  .container{
+    border: none;
+    padding: 0;
+  }
+  #sidebar{
+    height: 60px;
+    width: 100%;
+    border-right: none;
+    border-top: 1px solid var(--line-clr);
+    padding: 0;
+    position: fixed;
+    top: unset;
+    bottom: 0;
+
+    > ul{
+      padding: 0;
+      display: grid;
+      grid-auto-columns: 60px;
+      grid-auto-flow: column;
+      align-items: center;
+      overflow-x: scroll;
+    }
+    ul li{
+      height: 100%;
+    }
+    ul a, ul .dropdown-btn{
+      width: 60px;
+      height: 60px;
+      padding: 0;
+      border-radius: 0;
+      justify-content: center;
+    }
+
+    ul li span, ul li:first-child, .dropdown-btn svg:last-child{
+      display: none;
+    }
+
+    ul li .sub-menu.show{
+      position: fixed;
+      bottom: 60px;
+      left: 0;
+      box-sizing: border-box;
+      height: 60px;
+      width: 100%;
+      background-color: var(--hover-clr);
+      border-top: 1px solid var(--line-clr);
+      display: flex;
+      justify-content: center;
+
+      > div{
+        overflow-x: auto;
+      }
+      li{
+        display: inline-flex;
+      }
+      a{
+        box-sizing: border-box;
+        padding: 1em;
+        width: auto;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+/*.settings-panel {
+  width: 230px;
+  height: 100%; /* Adjust height to full viewport */
+  /*position: fixed;
+  left: 0;
+  top: 0;
+  background-color: var(--background-light); /* Using light background color */
+  /*transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(-100%); /* Start hidden */
+  /*z-index: 10; /* Lower than button */
+  /*padding-top: 60px; /* Space for button at the top */
+/*}
+
+.settings-button-container {
+  position: fixed; /* Ensures button is always visible */
+/*  top: 0; /* Aligns with top of viewport */
+  /*z-index: 20; /* Higher z-index to stay on top 
+  width: 100%;
+  padding: 10px 0; /* Padding to push content down 
+}
+
+.settings-button {
+  margin-left: 20px; /* Left margin for the button 
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.settings-button img {
+  width: 48px; /* As per previous settings 
+  height: 48px;
+}
+
+.settings-panel ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  padding-top: 60px; /* Space for button 
+}
+
+.settings-panel li {
+  color: var(--paragraph);
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--background-color); /* Subtle separator 
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.settings-panel li:hover {
+  background-color: var(--background-color); /* Highlight on hover 
+}
+
+.settings-dropdown > ul {
+  display: none; /* Hide dropdown by default 
+  background-color: var(--background-light); /* Background for dropdown 
+}
+
+.settings-dropdown:hover > ul {
+  display: block; /* Show dropdown on hover 
+}
+
+.settings-option {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+}
+
+/* Ensure transitions for sliding in and out 
+.settings-panel.show {
+  transform: translateX(0%);
+}
+
+.settings-panel.show ~ .flashcards {
+  margin-left: 230px; /* Push content to the right by the panel's width 
+}*/

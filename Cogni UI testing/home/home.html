@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="../Header/Header.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="../assets/Cogni Header.png" alt="Cogni Logo">
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="../flashcard/Flashcard.html">Flashcard</a></li>
+                    <li><a href="../Generative Testing/AITesting.html">Testing</a></li>
+                </ul>
+            </nav>
+            <div class="sign-in">
+                <button>Sign In</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Redefining Learning with Cogni</h1>
+            <h2>Harness the Power of Cognitive Education</h2>
+            <!-- Updated "Get Started" button -->
+            <a href="#features" class="cta" id="get-started">Get Started</a>
+        </div>
+    </section>
+
+    <div class="about">
+        <div class="about-image">
+            <img src="../assets/about.svg" alt="About Image">
+        </div>
+        <div class="about-content">
+            <h1>About Cogni</h1>
+            <p>Founded in 2024, Cogni leads the way in educational innovation. We're dedicated to crafting accessible, effective learning experiences that empower students globally to sharpen their cognitive skills.</p>
+        </div>
+    </div>
+
+    <!-- Features Section with ID added -->
+    <div class="features" id="features">
+        <div class="features-content">
+            <h1>Maximize Your Learning With Our Generative Features</h1>
+            <div class="feature-showcase">
+                <a href="../Flashcard/Flashcard.html" class="feature-link">
+                    <div class="feature">
+                        <div class="feature-inner">
+                            <img src="../assets/feature-1.svg" alt="Generative Flashcards">
+                            <h2>Generative Flashcards</h2>
+                            <p>Personalized flashcards that adapt to your learning progress.</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="../Generative Testing/AITesting.html" class="feature-link">
+                    <div class="feature">
+                        <div class="feature-inner">
+                            <img src="../assets/feature-2.svg" alt="Generative Testing">
+                            <h2>Generative Testing</h2>
+                            <p>Adaptive tests that adjust to your knowledge level for personalized learning.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rest of your sections: AI-powered, any-subject-assistance, FAQ, Footer -->
+
+    <div class="frequently-asked-questions">
+        <div class="faq-content">
+            <h1>Frequently Asked Questions</h1>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h2>Why choose Cogni as your Homework Helper?</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Cogni is your trusted companion for detailed step-by-step solutions and clear explanations to tackle your questions. Whether it's math, physics, chemistry, biology, or any other subject, Cogni has you covered. Tailored for college students, Cogni adjusts the complexity of explanations to suit your level, ensuring easier understanding and effective learning.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h2>Is Cogni Helper Suitable for All Academic Levels?</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, Cogni Helper is designed to be suitable for all academic levels, from high school to university. It adapts its responses to the level of difficulty appropriate for the user.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h2>What Subjects Does Cogni Helper Cover?</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Cogni Helper covers a wide range of subjects including Math, Physics, Chemistry, Biology, Computer Science, and more. It continuously updates to include more topics as needed.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h2>Can Cogni Solve Geometry Problems?</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, Cogni is capable of solving a variety of geometry problems, providing step-by-step solutions and explanations to ensure you understand the concepts thoroughly.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h2>How Accurate is Cogni as an AI Helper?</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Cogni strives for high accuracy in its answers, leveraging advanced algorithms and up-to-date information. However, users are encouraged to cross-verify critical information as part of good academic practice.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h2>Will Using Cogni Helper Be Considered Cheating?</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Using Cogni Helper for learning and understanding concepts is not considered cheating. It is a tool designed to aid your study process. However, using it to directly complete assignments without understanding the material might not be advisable.</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="../assets/Cogni Header.png" alt="Cogni Logo">
+        <p>&copy; 2024 Cogni. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript for FAQ Functionality and Smooth Scrolling (if not using CSS method) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                const toggleIcon = item.querySelector('.toggle-icon');
+
+                question.addEventListener('click', () => {
+                    // If the clicked FAQ is already active, remove active class
+                    if (item.classList.contains('active')) {
+                        item.classList.remove('active');
+                        toggleIcon.textContent = '+';
+                    } else {
+                        // Close all other FAQs
+                        faqItems.forEach(otherItem => {
+                            otherItem.classList.remove('active');
+                            const otherToggleIcon = otherItem.querySelector('.toggle-icon');
+                            otherToggleIcon.textContent = '+';
+                        });
+
+                        // Open the clicked FAQ
+                        item.classList.add('active');
+                        toggleIcon.textContent = '−';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
